@@ -7,6 +7,7 @@ exports.up = function(knex) {
       tbl.float('place_latitude')
       tbl.float('place_longitude')
       tbl.string('place_address_label')
+      tbl.string('place_banner')
   })
 };
 
