@@ -61,6 +61,18 @@ const addUser = newUser => {
             .then(ids => ({ id: ids[0] }))
 }
 
+const getUserById = userId => {
+    return db("user")
+            .where({ id: userId })
+            .select(
+                'user.id',
+                'user.first_name',
+                'user.last_name',
+                'user.email'
+            )
+            .first()
+}
+
 const addHikingPlace = newPlace => {
     return db("hiking_place")
             .returning("id")
@@ -103,6 +115,19 @@ const addGroupUser = newGroupUser => {
             .then(ids => ({ id: ids[0] }))
 }
 
+const getFriendsByHiker = hikerId => {
+    return db("friend")
+            .where({ requester_id: hikerId })
+            
+}
+
+const addFriend = newFriendIds => {
+    return db("friend")
+            .returning("id")
+            .insert(newFriendIds)
+            .then(ids => ({id: ids[0]}))
+}
+
 module.exports = {
     getPlaces,
     updateAPlace,
@@ -110,10 +135,13 @@ module.exports = {
     getIndVisitorOfAPlace,
     getGroupVisitorOfAPlace,
     addUser,
+    getUserById,
     addHikingPlace,
     addGroup,
     addStory,
     addVisitDataInd,
     addVisitDataGroup,
-    addGroupUser
+    addGroupUser,
+    addFriend,
+    getFriendsByHiker
 }

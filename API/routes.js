@@ -79,6 +79,45 @@ route.post('/users', async (req,res) => {
     }
 })
 
+//GET user by id
+route.get('/users/:userId',async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const user = await models.getUserById(userId)
+        res.status(200).json(user)
+    } catch (err){
+        res.status(500).json(err.message)
+    }
+})
+
+//ADD friend
+route.post('/friends', async (req, res) => {
+    const newFriendIds = req.body
+    try {
+        const newConnectionId = await models.addFriend(newFriendIds)
+        res.status(200).json(newConnectionId)
+    } catch (err){
+        res.status(500).json(err.message)
+    }
+})
+
+//GET friend by hiker
+route.get('/friends/:hikerId', async (req, res) => {
+    const hikerId = req.params.hikerId
+    try {
+        const friends = await models.getFriendsByHiker(hikerId)
+        if (friends.length > 0){
+            for (let i = 0; i < friends.length; i++){
+                let friendInfo = await models.getUserById(friends[i].receiver_id)
+                friends[i] = friendInfo
+            }
+        }
+        res.status(200).json(friends)
+    } catch (err){
+        res.status(500).json(err.message)
+    }
+})
+
 //ADD hiking_place
 route.post('/places', async (req,res) => {
     const newSpot = req.body
